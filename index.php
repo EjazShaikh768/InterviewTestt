@@ -153,13 +153,14 @@
 
                                   <h6>Rp.2,000,000 - Rp. 5,000,000</h6>
                             </div>
-                            <div class="col-sm-1 mt-3 search-container">
-        <input type="text" name="search" placeholder="Search..." class="search-input">
-        <a name="searchBTn" class="search-btn btn-primary">
+                            <div class="col-sm-1 mt-3 ">
+       <form action="<?php $_SERVER['PHP_SELF']; ?>" class="search-container" method="get">
+       <input type="text" name="search" placeholder="Search..." class="search-input">
+        <button name="searchBTn" class="search-btn btn-primary">
                 <i class="fas fa-search"></i>      
-        </a>
+</button>
+      </form>
     </div>
-                           
                         </div>
                         
                     </div>
@@ -174,11 +175,38 @@
             </div>
         </div>
 
+        <div class="container">
+<div class="row">
+                     
 <?php
+  $conn0 = mysqli_connect("localhost","root","","aliya") or die(mysqli_connect_errno());
+if (isset($_GET['searchBTn'])) {
+  $search_trm = mysqli_real_escape_string($conn0 , $_GET['search']);
+  
+}
+  $sql0 = "SELECT * FROM test3  WHERE full_name   LIKE '%{$search_trm}%' OR descriptions   LIKE '%{$search_trm}%'  OR price   LIKE '%{$search_trm}%' ";
+  $result0 = mysqli_query($conn0 , $sql0)or die();
+  if (mysqli_num_rows($result0) > 0) {
+      while ($rows = mysqli_fetch_assoc($result0)) {
 
-
-
-?>
+                                  ?>
+                                    <div class="col-sm-3 mt-3">
+                                        <div class="card" style="width:100%;">
+                                            <img src="admin/upload/<?php echo $rows['images']; ?>" class="card-img-top" alt="..." style="width:100%;height:200px;">
+                                            <div class="card-body">
+                                              <h5 class="card-title"><?php echo $rows['full_name']; ?></h5>
+                                              <p class="card-text"><?php echo $rows['descriptions']; ?></p>
+                                              <p>Rp. <?php echo $rows['price']; ?></p>
+                                            </div>
+                                          </div>
+                                    </div>
+                                    <?php
+                                    }
+                                  }
+                                  
+                                  ?>
+                                </div>
+</div>
 
                 <div class="container">
                     <div class="row justify-content-center">
